@@ -1,7 +1,13 @@
 import classnames from 'classnames';
 import React from 'react';
+import 'react-resizable/css/styles.css';
+import Trigger from 'rc-trigger';
 import { EditorState, Entity, Modifier } from 'draft-js';
 import Image from './EditorPluginImage';
+import ImageLoader from './EditorPluginImageLoader';
+import UploadPopup from './UploadPopup';
+import ImageButton from './ImageButton';
+import exportImage from './exportImage';
 
 function findWithRegex(regex, contentBlock, callback) {
   // Get the text from the contentBlock
@@ -25,7 +31,7 @@ export default {
     };
 
     function insertPicture(url) {
-      const entityKey = Entity.create('image', 'IMMUTABLE', { url });
+      const entityKey = Entity.create('image-loader', 'IMMUTABLE', { url, export: exportImage });
       const editorState = callbacks.getEditorState();
       const selection = editorState.getSelection();
 
@@ -49,6 +55,11 @@ export default {
       );
     }
 
+    const uploadPopup = (<div>
+      <input type="text"/>
+
+    </div>);
+
     return {
       name: 'image',
       callbacks,
@@ -60,15 +71,16 @@ export default {
           }, callback);
         },
         component: (props) => <Image {...props} />
+      }, {
+        strategy (contentBlock, callback) {
+          contentBlock.findEntityRanges(character => {
+          const entityKey = character.getEntity();
+          return entityKey && Entity.get(entityKey).getType() === 'image-loader';
+          }, callback);
+        },
+        component: (props) => <ImageLoader {...props} callbacks={callbacks} />
       }],
-      component: (props) => {
-        const cls = classnames({
-          ['editor-icon']: true,
-          ['editor-icon-picture']: true
-        });
-
-        return <span onMouseDown={() => insertPicture('https://t.alipayobjects.com/images/T11rdgXbFkXXXXXXXX.png') } className={cls} />
-      },
+      component: (props) => <ImageButton insertPicture={insertPicture} />
     };
   },
   config: {},

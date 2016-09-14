@@ -6,33 +6,12 @@ import { Resizable } from 'react-resizable';
 class EditorPluginImage extends React.Component<any, any> {
   constructor() {
     super();
-    this.state = {
-      width: 0,
-      height: 0,
-      url: null,
-      loaded: false,
-      focus: false,
-    };
   }
 
-  componentWillMount() {
-    const { entityKey } = this.props;
-    const entity = Entity.get(entityKey);
-    const url = entity.getData().url;
-    const image = new Image();
-    image.onload = () => {
-      const { width, height } = image;
-      this.setState({
-        width,
-        height,
-        url,
-        loaded: true
-      });
-    }
-    image.src = url;
-  }
   onResize = (event, {element, size}) => {
     this.setState({width: size.width, height: size.height});
+    const { entityKey } = this.props;
+    Entity.mergeData(entityKey, { width: size.width, height: size.height });
   };
   onMouseDown = () => {
     this.setState({
@@ -40,11 +19,14 @@ class EditorPluginImage extends React.Component<any, any> {
     });
   }
   render() {
-    const { width, height, loaded, url, focus } = this.state;
+    const { entityKey } = this.props;
+    const entityData = Entity.get(entityKey).getData();
+
+    const { width, height, image } = entityData;
     const imageStyle = {
       width,
       height,
-      backgroundImage: `url(${url})`,
+      backgroundImage: `url(${image.src})`,
       backgroundSize: '100% 100%',
       lineHeight: `${height}px`,
       letterSpacing: width,
@@ -57,17 +39,14 @@ class EditorPluginImage extends React.Component<any, any> {
       ['focus']: focus,
     });
 
-    if (loaded) {
-      return (<Resizable width={width} height={height} onResize={this.onResize}>
-        <span
-          className={cls}
-          contentEditable={false}
-          onMouseDown={this.onMouseDown}
-          style={imageStyle}
-       />
-      </Resizable>);
-    }
-    return <span >loading...</span>
+    return (<Resizable width={width} height={height} onResize={this.onResize}>
+      <span
+        className={cls}
+        contentEditable={false}
+        onMouseDown={this.onMouseDown}
+        style={imageStyle}
+     />
+    </Resizable>);
   };
 }
 

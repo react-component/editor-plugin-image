@@ -1,7 +1,7 @@
 // use jsx to render html, do not modify simple.html
 
 import 'rc-editor-core/assets/index.css';
-import 'react-resizable/css/styles.css';
+import '../assets/index.less';
 import Image from 'rc-editor-plugin-image';
 import { EditorCore, Toolbar, GetHTML } from 'rc-editor-core';
 import React from 'react';
