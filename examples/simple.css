@@ -116,5 +116,11 @@
   box-sizing: border-box;
   cursor: se-resize;
 }
+.resizable-image {
+  border: 1px solid transparent;
+}
+.resizable-image.focus {
+  border: 1px solid blue;
+}
 
 /*# sourceMappingURL=simple.css.map*/

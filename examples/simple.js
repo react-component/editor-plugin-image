@@ -15,11 +15,13 @@ webpackJsonp([0,1],[
 	
 	__webpack_require__(3);
 	
-	var _rcEditorPluginImage = __webpack_require__(4);
+	__webpack_require__(4);
+	
+	var _rcEditorPluginImage = __webpack_require__(5);
 	
 	var _rcEditorPluginImage2 = _interopRequireDefault(_rcEditorPluginImage);
 	
-	var _rcEditorCore = __webpack_require__(309);
+	var _rcEditorCore = __webpack_require__(313);
 	
 	var _react = __webpack_require__(7);
 	
@@ -33,8 +35,9 @@ webpackJsonp([0,1],[
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var plugins = [_rcEditorPluginImage2.default]; // use jsx to render html, do not modify simple.html
+	// use jsx to render html, do not modify simple.html
 	
+	var plugins = [_rcEditorPluginImage2.default];
 	var toolbars = [['image']];
 	
 	var EditorWithPreview = _react2.default.createClass({
@@ -75,6 +78,8 @@ webpackJsonp([0,1],[
 /* 3 */
 2,
 /* 4 */
+2,
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -83,7 +88,7 @@ webpackJsonp([0,1],[
 	  value: true
 	});
 	
-	var _src = __webpack_require__(5);
+	var _src = __webpack_require__(6);
 	
 	var _src2 = _interopRequireDefault(_src);
 	
@@ -94,7 +99,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -103,9 +108,7 @@ webpackJsonp([0,1],[
 	    value: true
 	});
 	
-	var _classnames2 = __webpack_require__(6);
-	
-	var _classnames3 = _interopRequireDefault(_classnames2);
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	var _react = __webpack_require__(7);
 	
@@ -117,9 +120,19 @@ webpackJsonp([0,1],[
 	
 	var _EditorPluginImage2 = _interopRequireDefault(_EditorPluginImage);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _EditorPluginImageLoader = __webpack_require__(310);
 	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	var _EditorPluginImageLoader2 = _interopRequireDefault(_EditorPluginImageLoader);
+	
+	var _ImageButton = __webpack_require__(312);
+	
+	var _ImageButton2 = _interopRequireDefault(_ImageButton);
+	
+	var _exportImage = __webpack_require__(311);
+	
+	var _exportImage2 = _interopRequireDefault(_exportImage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function findWithRegex(regex, contentBlock, callback) {
 	    // Get the text from the contentBlock
@@ -141,7 +154,7 @@ webpackJsonp([0,1],[
 	            setEditorState: noop
 	        };
 	        function insertPicture(url) {
-	            var entityKey = _draftJs.Entity.create('image', 'IMMUTABLE', { url: url });
+	            var entityKey = _draftJs.Entity.create('image-loader', 'IMMUTABLE', { url: url, export: _exportImage2.default });
 	            var editorState = callbacks.getEditorState();
 	            var selection = editorState.getSelection();
 	            var insertPictureContent = _draftJs.Modifier.replaceText(editorState.getCurrentContent(), selection, url, null, entityKey);
@@ -149,6 +162,11 @@ webpackJsonp([0,1],[
 	            var newEditorState = _draftJs.EditorState.push(editorState, InsertSpaceContent, 'insert-mention');
 	            callbacks.setEditorState(_draftJs.EditorState.forceSelection(newEditorState, InsertSpaceContent.getSelectionAfter()));
 	        }
+	        var uploadPopup = _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement('input', { type: 'text' })
+	        );
 	        return {
 	            name: 'image',
 	            callbacks: callbacks,
@@ -163,14 +181,20 @@ webpackJsonp([0,1],[
 	                component: function component(props) {
 	                    return _react2.default.createElement(_EditorPluginImage2.default, props);
 	                }
+	            }, {
+	                strategy: function strategy(contentBlock, callback) {
+	                    contentBlock.findEntityRanges(function (character) {
+	                        var entityKey = character.getEntity();
+	                        return entityKey && _draftJs.Entity.get(entityKey).getType() === 'image-loader';
+	                    }, callback);
+	                },
+	
+	                component: function component(props) {
+	                    return _react2.default.createElement(_EditorPluginImageLoader2.default, _extends({}, props, { callbacks: callbacks }));
+	                }
 	            }],
 	            component: function component(props) {
-	                var _classnames;
-	
-	                var cls = (0, _classnames3.default)((_classnames = {}, _defineProperty(_classnames, 'editor-icon', true), _defineProperty(_classnames, 'editor-icon-picture', true), _classnames));
-	                return _react2.default.createElement('span', { onMouseDown: function onMouseDown() {
-	                        return insertPicture('https://t.alipayobjects.com/images/T11rdgXbFkXXXXXXXX.png');
-	                    }, className: cls });
+	                return _react2.default.createElement(_ImageButton2.default, { insertPicture: insertPicture });
 	            }
 	        };
 	    },
@@ -178,60 +202,6 @@ webpackJsonp([0,1],[
 	    config: {}
 	};
 	module.exports = exports['default'];
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2016 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-	/* global define */
-	
-	(function () {
-		'use strict';
-	
-		var hasOwn = {}.hasOwnProperty;
-	
-		function classNames () {
-			var classes = [];
-	
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
-	
-				var argType = typeof arg;
-	
-				if (argType === 'string' || argType === 'number') {
-					classes.push(arg);
-				} else if (Array.isArray(arg)) {
-					classes.push(classNames.apply(null, arg));
-				} else if (argType === 'object') {
-					for (var key in arg) {
-						if (hasOwn.call(arg, key) && arg[key]) {
-							classes.push(key);
-						}
-					}
-				}
-			}
-	
-			return classes.join(' ');
-		}
-	
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = classNames;
-		} else if (true) {
-			// register as 'classnames', consistent with npm package name
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return classNames;
-			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else {
-			window.classNames = classNames;
-		}
-	}());
-
 
 /***/ },
 /* 7 */
@@ -390,7 +360,6 @@ webpackJsonp([0,1],[
 /***/ function(module, exports) {
 
 	// shim for using process in browser
-	
 	var process = module.exports = {};
 	
 	// cached from whatever global is present so that test runners that stub it
@@ -401,22 +370,84 @@ webpackJsonp([0,1],[
 	var cachedSetTimeout;
 	var cachedClearTimeout;
 	
+	function defaultSetTimout() {
+	    throw new Error('setTimeout has not been defined');
+	}
+	function defaultClearTimeout () {
+	    throw new Error('clearTimeout has not been defined');
+	}
 	(function () {
-	  try {
-	    cachedSetTimeout = setTimeout;
-	  } catch (e) {
-	    cachedSetTimeout = function () {
-	      throw new Error('setTimeout is not defined');
+	    try {
+	        if (typeof setTimeout === 'function') {
+	            cachedSetTimeout = setTimeout;
+	        } else {
+	            cachedSetTimeout = defaultSetTimout;
+	        }
+	    } catch (e) {
+	        cachedSetTimeout = defaultSetTimout;
 	    }
-	  }
-	  try {
-	    cachedClearTimeout = clearTimeout;
-	  } catch (e) {
-	    cachedClearTimeout = function () {
-	      throw new Error('clearTimeout is not defined');
+	    try {
+	        if (typeof clearTimeout === 'function') {
+	            cachedClearTimeout = clearTimeout;
+	        } else {
+	            cachedClearTimeout = defaultClearTimeout;
+	        }
+	    } catch (e) {
+	        cachedClearTimeout = defaultClearTimeout;
 	    }
-	  }
 	} ())
+	function runTimeout(fun) {
+	    if (cachedSetTimeout === setTimeout) {
+	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    // if setTimeout wasn't available but was latter defined
+	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+	        cachedSetTimeout = setTimeout;
+	        return setTimeout(fun, 0);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedSetTimeout(fun, 0);
+	    } catch(e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+	            return cachedSetTimeout.call(null, fun, 0);
+	        } catch(e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+	            return cachedSetTimeout.call(this, fun, 0);
+	        }
+	    }
+	
+	
+	}
+	function runClearTimeout(marker) {
+	    if (cachedClearTimeout === clearTimeout) {
+	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    // if clearTimeout wasn't available but was latter defined
+	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+	        cachedClearTimeout = clearTimeout;
+	        return clearTimeout(marker);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedClearTimeout(marker);
+	    } catch (e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+	            return cachedClearTimeout.call(null, marker);
+	        } catch (e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+	            return cachedClearTimeout.call(this, marker);
+	        }
+	    }
+	
+	
+	
+	}
 	var queue = [];
 	var draining = false;
 	var currentQueue;
@@ -441,7 +472,7 @@ webpackJsonp([0,1],[
 	    if (draining) {
 	        return;
 	    }
-	    var timeout = cachedSetTimeout.call(null, cleanUpNextTick);
+	    var timeout = runTimeout(cleanUpNextTick);
 	    draining = true;
 	
 	    var len = queue.length;
@@ -458,7 +489,7 @@ webpackJsonp([0,1],[
 	    }
 	    currentQueue = null;
 	    draining = false;
-	    cachedClearTimeout.call(null, timeout);
+	    runClearTimeout(timeout);
 	}
 	
 	process.nextTick = function (fun) {
@@ -470,7 +501,7 @@ webpackJsonp([0,1],[
 	    }
 	    queue.push(new Item(fun, args));
 	    if (queue.length === 1 && !draining) {
-	        cachedSetTimeout.call(null, drainQueue, 0);
+	        runTimeout(drainQueue);
 	    }
 	};
 	
@@ -27937,7 +27968,6 @@ webpackJsonp([0,1],[
 	   *
 	   * @param defaultDir  Default direction of the service
 	   */
-	
 	  function UnicodeBidiService(defaultDir) {
 	    _classCallCheck(this, UnicodeBidiService);
 	
@@ -30246,7 +30276,6 @@ webpackJsonp([0,1],[
 	   * @param {string} query Query of the form "Name [range expression]"
 	   * @return {boolean}
 	   */
-	
 	  isBrowser: function isBrowser(query) {
 	    return compare(UserAgentData.browserName, UserAgentData.browserFullVersion, query);
 	  },
@@ -31741,7 +31770,6 @@ webpackJsonp([0,1],[
 	   * @param {string} version
 	   * @returns {boolean}
 	   */
-	
 	  contains: function contains(range, version) {
 	    return checkOrExpression(range.trim(), version.trim());
 	  }
@@ -32953,7 +32981,6 @@ webpackJsonp([0,1],[
 	  /**
 	   * @param {object} data
 	   */
-	
 	  function DataTransfer(data) {
 	    _classCallCheck(this, DataTransfer);
 	
@@ -33242,7 +33269,7 @@ webpackJsonp([0,1],[
 	 * @return {boolean}
 	 */
 	function hasArrayNature(obj) {
-	  return(
+	  return (
 	    // not null/false
 	    !!obj && (
 	    // arrays are objects, NodeLists are functions in Safari
@@ -37789,13 +37816,13 @@ webpackJsonp([0,1],[
 	
 	var React = _interopRequireWildcard(_react);
 	
-	var _classnames2 = __webpack_require__(6);
+	var _classnames2 = __webpack_require__(304);
 	
 	var _classnames3 = _interopRequireDefault(_classnames2);
 	
 	var _draftJs = __webpack_require__(164);
 	
-	var _reactResizable = __webpack_require__(304);
+	var _reactResizable = __webpack_require__(305);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -37824,58 +37851,32 @@ webpackJsonp([0,1],[
 	            var size = _ref.size;
 	
 	            _this.setState({ width: size.width, height: size.height });
+	            var entityKey = _this.props.entityKey;
+	
+	            _draftJs.Entity.mergeData(entityKey, { width: size.width, height: size.height });
 	        };
 	        _this.onMouseDown = function () {
 	            _this.setState({
 	                focus: true
 	            });
 	        };
-	        _this.state = {
-	            width: 0,
-	            height: 0,
-	            url: null,
-	            loaded: false,
-	            focus: false
-	        };
 	        return _this;
 	    }
-	
-	    EditorPluginImage.prototype.componentWillMount = function componentWillMount() {
-	        var _this2 = this;
-	
-	        var entityKey = this.props.entityKey;
-	
-	        var entity = _draftJs.Entity.get(entityKey);
-	        var url = entity.getData().url;
-	        var image = new Image();
-	        image.onload = function () {
-	            var width = image.width;
-	            var height = image.height;
-	
-	            _this2.setState({
-	                width: width,
-	                height: height,
-	                url: url,
-	                loaded: true
-	            });
-	        };
-	        image.src = url;
-	    };
 	
 	    EditorPluginImage.prototype.render = function render() {
 	        var _classnames;
 	
-	        var _state = this.state;
-	        var width = _state.width;
-	        var height = _state.height;
-	        var loaded = _state.loaded;
-	        var url = _state.url;
-	        var focus = _state.focus;
+	        var entityKey = this.props.entityKey;
+	
+	        var entityData = _draftJs.Entity.get(entityKey).getData();
+	        var width = entityData.width;
+	        var height = entityData.height;
+	        var image = entityData.image;
 	
 	        var imageStyle = {
 	            width: width,
 	            height: height,
-	            backgroundImage: 'url(' + url + ')',
+	            backgroundImage: 'url(' + image.src + ')',
 	            backgroundSize: '100% 100%',
 	            lineHeight: height + 'px',
 	            letterSpacing: width,
@@ -37883,17 +37884,10 @@ webpackJsonp([0,1],[
 	            display: 'inline-block'
 	        };
 	        var cls = (0, _classnames3.default)((_classnames = {}, _defineProperty(_classnames, 'resizable-image', true), _defineProperty(_classnames, 'focus', focus), _classnames));
-	        if (loaded) {
-	            return React.createElement(
-	                _reactResizable.Resizable,
-	                { width: width, height: height, onResize: this.onResize },
-	                React.createElement('span', { className: cls, contentEditable: false, onMouseDown: this.onMouseDown, style: imageStyle })
-	            );
-	        }
 	        return React.createElement(
-	            'span',
-	            null,
-	            'loading...'
+	            _reactResizable.Resizable,
+	            { width: width, height: height, onResize: this.onResize },
+	            React.createElement('span', { className: cls, contentEditable: false, onMouseDown: this.onMouseDown, style: imageStyle })
 	        );
 	    };
 	
@@ -37907,17 +37901,71 @@ webpackJsonp([0,1],[
 /* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+	
+	(function () {
+		'use strict';
+	
+		var hasOwn = {}.hasOwnProperty;
+	
+		function classNames () {
+			var classes = [];
+	
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+	
+				var argType = typeof arg;
+	
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+	
+			return classes.join(' ');
+		}
+	
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
+
+/***/ },
+/* 305 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	module.exports = function() {
 	  throw new Error("Don't instantiate Resizable directly! Use require('react-resizable').Resizable");
 	};
 	
-	module.exports.Resizable = __webpack_require__(305).default;
-	module.exports.ResizableBox = __webpack_require__(308).default;
+	module.exports.Resizable = __webpack_require__(306).default;
+	module.exports.ResizableBox = __webpack_require__(309).default;
 
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37930,9 +37978,9 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDraggable = __webpack_require__(306);
+	var _reactDraggable = __webpack_require__(307);
 	
-	var _cloneElement = __webpack_require__(307);
+	var _cloneElement = __webpack_require__(308);
 	
 	var _cloneElement2 = _interopRequireDefault(_cloneElement);
 	
@@ -38179,7 +38227,7 @@ webpackJsonp([0,1],[
 	exports.default = Resizable;
 
 /***/ },
-/* 306 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function webpackUniversalModuleDefinition(root, factory) {
@@ -39054,7 +39102,7 @@ webpackJsonp([0,1],[
 		  if (typeof bounds === 'string') {
 		    var ownerDocument = node.ownerDocument;
 		
-		    var ownerWindow = node.defaultView;
+		    var ownerWindow = ownerDocument.defaultView;
 		    var boundNode = void 0;
 		    if (bounds === 'parent') {
 		      boundNode = node.parentNode;
@@ -39732,7 +39780,7 @@ webpackJsonp([0,1],[
 	//# sourceMappingURL=react-draggable.js.map
 
 /***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39757,7 +39805,7 @@ webpackJsonp([0,1],[
 	};
 
 /***/ },
-/* 308 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39770,7 +39818,7 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Resizable = __webpack_require__(305);
+	var _Resizable = __webpack_require__(306);
 	
 	var _Resizable2 = _interopRequireDefault(_Resizable);
 	
@@ -39867,7 +39915,7 @@ webpackJsonp([0,1],[
 	exports.default = ResizableBox;
 
 /***/ },
-/* 309 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39876,7 +39924,210 @@ webpackJsonp([0,1],[
 	    value: true
 	});
 	
-	var _EditorCore = __webpack_require__(310);
+	var _react = __webpack_require__(7);
+	
+	var React = _interopRequireWildcard(_react);
+	
+	var _draftJs = __webpack_require__(164);
+	
+	var _DraftOffsetKey = __webpack_require__(227);
+	
+	var _DraftOffsetKey2 = _interopRequireDefault(_DraftOffsetKey);
+	
+	var _getRangesForDraftEntity = __webpack_require__(180);
+	
+	var _getRangesForDraftEntity2 = _interopRequireDefault(_getRangesForDraftEntity);
+	
+	var _exportImage = __webpack_require__(311);
+	
+	var _exportImage2 = _interopRequireDefault(_exportImage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+	
+	function getEntitySelectionState(contentBlock, entityKey) {
+	    var blockKey = contentBlock.getKey();
+	    var entitySelection = void 0;
+	    (0, _getRangesForDraftEntity2.default)(contentBlock, entityKey).forEach(function (range) {
+	        entitySelection = new _draftJs.SelectionState({
+	            anchorOffset: range.start,
+	            anchorKey: blockKey,
+	            focusOffset: range.end,
+	            focusKey: blockKey,
+	            isBackward: false
+	        });
+	    });
+	    return entitySelection;
+	}
+	
+	var EditorPluginImageLoader = function (_React$Component) {
+	    _inherits(EditorPluginImageLoader, _React$Component);
+	
+	    function EditorPluginImageLoader() {
+	        _classCallCheck(this, EditorPluginImageLoader);
+	
+	        return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
+	    }
+	
+	    EditorPluginImageLoader.prototype.componentWillMount = function componentWillMount() {
+	        var _this2 = this;
+	
+	        var entityKey = this.props.entityKey;
+	
+	        var entity = _draftJs.Entity.get(entityKey);
+	        var url = entity.getData().url;
+	        var image = new Image();
+	        image.onload = function () {
+	            var width = image.width;
+	            var height = image.height;
+	
+	            _this2.replaceToImage(image);
+	        };
+	        image.src = url;
+	    };
+	
+	    EditorPluginImageLoader.prototype.replaceToImage = function replaceToImage(image) {
+	        var _props = this.props;
+	        var callbacks = _props.callbacks;
+	        var entityKey = _props.entityKey;
+	        var offsetKey = _props.offsetKey;
+	        var decoratedText = _props.decoratedText;
+	
+	        var editorState = callbacks.getEditorState();
+	        var offset = _DraftOffsetKey2.default.decode(offsetKey);
+	        var contentBlock = editorState.getCurrentContent().getBlockForKey(offset.blockKey);
+	        var selection = getEntitySelectionState(contentBlock, entityKey);
+	        var imageEntity = _draftJs.Entity.create('image', 'IMMUTABLE', {
+	            image: image,
+	            width: image.width,
+	            height: image.height,
+	            export: _exportImage2.default
+	        });
+	        var replacedContent = _draftJs.Modifier.replaceText(editorState.getCurrentContent(), selection, decoratedText, null, imageEntity);
+	        callbacks.setEditorState(_draftJs.EditorState.push(editorState, replacedContent, 'replace-image'));
+	    };
+	
+	    EditorPluginImageLoader.prototype.render = function render() {
+	        return React.createElement(
+	            'div',
+	            null,
+	            ' loading.... '
+	        );
+	    };
+	
+	    return EditorPluginImageLoader;
+	}(React.Component);
+	
+	exports.default = EditorPluginImageLoader;
+	module.exports = exports['default'];
+
+/***/ },
+/* 311 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = exportImage;
+	function exportImage(content, editorData) {
+	    if (editorData.image) {
+	        return "<img src=" + editorData.image.src + " width=\"" + editorData.width + "\" height=\"" + editorData.height + "\"/>";
+	    } else {
+	        return "<img src=" + editorData.url + " />";
+	    }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(7);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _classnames2 = __webpack_require__(304);
+	
+	var _classnames3 = _interopRequireDefault(_classnames2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+	
+	var ImageButton = function (_React$Component) {
+	    _inherits(ImageButton, _React$Component);
+	
+	    function ImageButton() {
+	        _classCallCheck(this, ImageButton);
+	
+	        var _this = _possibleConstructorReturn(this, _React$Component.call(this));
+	
+	        _this.state = {
+	            visible: false
+	        };
+	        return _this;
+	    }
+	
+	    ImageButton.prototype.toggleVisible = function toggleVisible() {
+	        this.setState({
+	            visible: !this.state.visible
+	        });
+	    };
+	
+	    ImageButton.prototype.render = function render() {
+	        var _classnames,
+	            _this2 = this;
+	
+	        var visible = this.state.visible;
+	
+	        var cls = (0, _classnames3.default)((_classnames = {}, _defineProperty(_classnames, 'editor-icon', true), _defineProperty(_classnames, 'editor-icon-picture', true), _classnames));
+	        return _react2.default.createElement('span', { onMouseDown: function onMouseDown() {
+	                return _this2.props.insertPicture('https://t.alipayobjects.com/images/T11rdgXbFkXXXXXXXX.png');
+	            }, className: cls });
+	    };
+	
+	    return ImageButton;
+	}(_react2.default.Component);
+	
+	exports.default = ImageButton;
+	module.exports = exports['default'];
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _EditorCore = __webpack_require__(314);
 	
 	var _EditorCore2 = _interopRequireDefault(_EditorCore);
 	
@@ -39903,7 +40154,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 310 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39922,21 +40173,21 @@ webpackJsonp([0,1],[
 	
 	var _immutable = __webpack_require__(167);
 	
-	var _Toolbar = __webpack_require__(311);
+	var _Toolbar = __webpack_require__(315);
 	
-	var _ConfigStore = __webpack_require__(314);
+	var _ConfigStore = __webpack_require__(318);
 	
 	var _ConfigStore2 = _interopRequireDefault(_ConfigStore);
 	
-	var _getHTML = __webpack_require__(315);
+	var _getHTML = __webpack_require__(319);
 	
 	var _getHTML2 = _interopRequireDefault(_getHTML);
 	
-	var _exportText = __webpack_require__(317);
+	var _exportText = __webpack_require__(321);
 	
 	var _exportText2 = _interopRequireDefault(_exportText);
 	
-	__webpack_require__(316);
+	__webpack_require__(320);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 	
@@ -40008,6 +40259,8 @@ webpackJsonp([0,1],[
 	    };
 	
 	    EditorCore.prototype.reloadPlugins = function reloadPlugins() {
+	        var _this2 = this;
+	
 	        return this.plugins && this.plugins.size ? this.plugins.map(function (plugin) {
 	            //　如果插件有 callbacks 方法,则认为插件已经加载。
 	            if (plugin.callbacks) {
@@ -40015,7 +40268,8 @@ webpackJsonp([0,1],[
 	            }
 	            // 如果插件有 constructor 方法,则构造插件
 	            if (plugin.hasOwnProperty('constructor')) {
-	                return plugin.constructor(plugin.config);
+	                var pluginConfig = Object.assign(_this2.props.pluginConfig, plugin.config);
+	                return plugin.constructor(pluginConfig);
 	            }
 	            // else 无效插件
 	            console.warn('>> 插件: [', plugin.name, '] 无效。插件或许已经过期。');
@@ -40076,6 +40330,7 @@ webpackJsonp([0,1],[
 	        configStore.set('customStyleMap', customStyleMap);
 	        configStore.set('customBlockStyleMap', customBlockStyleMap);
 	        configStore.set('blockRenderMap', customBlockRenderMap);
+	        configStore.set('customStyleFn', this.customStyleFn.bind(this));
 	        this.setState({
 	            toolbarPlugins: toolbarPlugins,
 	            compositeDecorator: compositeDecorator
@@ -40104,7 +40359,7 @@ webpackJsonp([0,1],[
 	        return editorState;
 	    };
 	
-	    EditorCore.getStyleMap = function getStyleMap() {
+	    EditorCore.prototype.getStyleMap = function getStyleMap() {
 	        return configStore.get('customStyleMap');
 	    };
 	
@@ -40114,13 +40369,13 @@ webpackJsonp([0,1],[
 	    };
 	
 	    EditorCore.prototype.initPlugins = function initPlugins() {
-	        var _this2 = this;
+	        var _this3 = this;
 	
 	        var enableCallbacks = ['getEditorState', 'setEditorState', 'getStyleMap', 'setStyleMap'];
 	        return this.getPlugins().map(function (plugin) {
 	            enableCallbacks.forEach(function (callbackName) {
 	                if (plugin.callbacks.hasOwnProperty(callbackName)) {
-	                    plugin.callbacks[callbackName] = _this2[callbackName].bind(_this2);
+	                    plugin.callbacks[callbackName] = _this3[callbackName].bind(_this3);
 	                }
 	            });
 	            return plugin;
@@ -40136,12 +40391,12 @@ webpackJsonp([0,1],[
 	    };
 	
 	    EditorCore.prototype.getEventHandler = function getEventHandler() {
-	        var _this3 = this;
+	        var _this4 = this;
 	
 	        var enabledEvents = ['onUpArrow', 'onDownArrow', 'handleReturn', 'onFocus', 'onBlur'];
 	        var eventHandler = {};
 	        enabledEvents.forEach(function (event) {
-	            eventHandler[event] = _this3.generatorEventHandler(event);
+	            eventHandler[event] = _this4.generatorEventHandler(event);
 	        });
 	        return eventHandler;
 	    };
@@ -40151,7 +40406,7 @@ webpackJsonp([0,1],[
 	    };
 	
 	    EditorCore.prototype.setEditorState = function setEditorState(editorState) {
-	        var _this4 = this;
+	        var _this5 = this;
 	
 	        var focusEditor = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 	
@@ -40170,7 +40425,7 @@ webpackJsonp([0,1],[
 	        if (!this.controlledMode) {
 	            this.setState({ editorState: newEditorState }, focusEditor ? function () {
 	                return setTimeout(function () {
-	                    return _this4.refs.editor.focus();
+	                    return _this5.refs.editor.focus();
 	                }, 100);
 	            } : noop);
 	        }
@@ -40228,15 +40483,32 @@ webpackJsonp([0,1],[
 	    };
 	
 	    EditorCore.prototype.generatorEventHandler = function generatorEventHandler(eventName) {
-	        var _this5 = this;
+	        var _this6 = this;
 	
 	        return function () {
 	            for (var _len2 = arguments.length, args = Array(_len2), _key4 = 0; _key4 < _len2; _key4++) {
 	                args[_key4] = arguments[_key4];
 	            }
 	
-	            return _this5.eventHandle.apply(_this5, [eventName].concat(args));
+	            return _this6.eventHandle.apply(_this6, [eventName].concat(args));
 	        };
+	    };
+	
+	    EditorCore.prototype.customStyleFn = function customStyleFn(styleSet) {
+	        if (styleSet.size === 0) {
+	            return {};
+	        }
+	        var plugins = this.getPlugins();
+	        var resultStyle = {};
+	        for (var i = 0; i < plugins.length; i++) {
+	            if (plugins[i].customStyleFn) {
+	                var styled = plugins[i].customStyleFn(styleSet);
+	                if (styled) {
+	                    Object.assign(resultStyle, styled);
+	                }
+	            }
+	        }
+	        return resultStyle;
 	    };
 	
 	    EditorCore.prototype.render = function render() {
@@ -40259,7 +40531,7 @@ webpackJsonp([0,1],[
 	            React.createElement(
 	                'div',
 	                { className: prefixCls + '-editor-wrapper', style: style },
-	                React.createElement(_draftJs.Editor, _extends({}, this.props, eventHandler, { ref: 'editor', customStyleMap: customStyleMap, editorState: editorState, handleKeyCommand: this.handleKeyCommand.bind(this), keyBindingFn: this.handleKeyBinding.bind(this), onChange: this.setEditorState.bind(this), blockStyleFn: this.getBlockStyle.bind(this), blockRenderMap: blockRenderMap })),
+	                React.createElement(_draftJs.Editor, _extends({}, this.props, eventHandler, { ref: 'editor', customStyleMap: customStyleMap, customStyleFn: this.customStyleFn.bind(this), editorState: editorState, handleKeyCommand: this.handleKeyCommand.bind(this), keyBindingFn: this.handleKeyBinding.bind(this), onChange: this.setEditorState.bind(this), blockStyleFn: this.getBlockStyle.bind(this), blockRenderMap: blockRenderMap })),
 	                this.props.children
 	            )
 	        );
@@ -40274,6 +40546,7 @@ webpackJsonp([0,1],[
 	    multiLines: true,
 	    plugins: [],
 	    prefixCls: 'rc-editor-core',
+	    pluginConfig: {},
 	    toolbars: [],
 	    spilitLine: 'enter'
 	};
@@ -40281,7 +40554,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 311 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40291,7 +40564,7 @@ webpackJsonp([0,1],[
 	});
 	exports.createToolbar = createToolbar;
 	
-	var _Toolbar = __webpack_require__(312);
+	var _Toolbar = __webpack_require__(316);
 	
 	var _Toolbar2 = _interopRequireDefault(_Toolbar);
 	
@@ -40326,7 +40599,7 @@ webpackJsonp([0,1],[
 	}
 
 /***/ },
-/* 312 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40341,7 +40614,7 @@ webpackJsonp([0,1],[
 	
 	var _immutable = __webpack_require__(167);
 	
-	var _ToolbarLine = __webpack_require__(313);
+	var _ToolbarLine = __webpack_require__(317);
 	
 	var _ToolbarLine2 = _interopRequireDefault(_ToolbarLine);
 	
@@ -40429,7 +40702,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 313 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40476,7 +40749,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 314 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40511,7 +40784,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 315 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40533,7 +40806,7 @@ webpackJsonp([0,1],[
 	
 	var _CSSProperty = __webpack_require__(103);
 	
-	__webpack_require__(316);
+	__webpack_require__(320);
 	
 	var EMPTY_SET = exports.EMPTY_SET = new _immutable.OrderedSet();
 	var DEFAULT_ELEMENT = exports.DEFAULT_ELEMENT = 'span';
@@ -40589,6 +40862,7 @@ webpackJsonp([0,1],[
 	        var blockMap = content.getBlockMap();
 	        var customStyleMap = configStore.get('customStyleMap') || {};
 	        var customBlockRenderMap = configStore.get('blockRenderMap') || {};
+	        var customStyleFn = configStore.get('customStyleFn');
 	        Object.assign(customStyleMap, DEFAULT_INLINE_STYLE);
 	        return blockMap.map(function (block) {
 	            var resultText = '<div>';
@@ -40636,6 +40910,8 @@ webpackJsonp([0,1],[
 	                                    inlineStyle = Object.assign(inlineStyle, currentStyle);
 	                                }
 	                            });
+	                            var costumedStyle = customStyleFn(styleSet);
+	                            inlineStyle = Object.assign(inlineStyle, costumedStyle);
 	                            return {
 	                                v: '<span style="' + getStyleText(inlineStyle) + '">' + encodedContent + '</span>'
 	                            };
@@ -40671,13 +40947,13 @@ webpackJsonp([0,1],[
 	}
 
 /***/ },
-/* 316 */
+/* 320 */
 /***/ function(module, exports) {
 
 	"use strict";
 
 /***/ },
-/* 317 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
