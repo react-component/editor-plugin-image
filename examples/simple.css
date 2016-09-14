@@ -99,6 +99,12 @@
 .alignJustify {
   text-align: justify;
 }
+.resizable-image {
+  border: 1px solid transparent;
+}
+.resizable-image.focus {
+  border: 1px solid blue;
+}
 .react-resizable {
   position: relative;
 }
@@ -115,12 +121,6 @@
   background-origin: content-box;
   box-sizing: border-box;
   cursor: se-resize;
-}
-.resizable-image {
-  border: 1px solid transparent;
-}
-.resizable-image.focus {
-  border: 1px solid blue;
 }
 
 /*# sourceMappingURL=simple.css.map*/
