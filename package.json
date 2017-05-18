@@ -1,6 +1,6 @@
 {
   "name": "rc-editor-plugin-image",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "editor-plugin-image ui component for react",
   "keywords": [
     "react",
