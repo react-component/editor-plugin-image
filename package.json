@@ -55,7 +55,7 @@
     "rc-dialog": "^6.3.0",
     "rc-editor-core": "^0.5.1",
     "rc-trigger": "^1.7.1",
-    "rc-upload": "^2.0.4",
+    "rc-upload": "^3.1.1",
     "react-resizable": "^1.4.2"
   }
 }
