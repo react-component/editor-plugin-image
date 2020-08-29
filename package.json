@@ -56,6 +56,6 @@
     "rc-editor-core": "^0.5.1",
     "rc-trigger": "^1.7.1",
     "rc-upload": "^2.0.4",
-    "react-resizable": "^1.4.2"
+    "react-resizable": "^2.0.0"
   }
 }
